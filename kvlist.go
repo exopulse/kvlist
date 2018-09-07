@@ -5,12 +5,68 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+	"strings"
+	"unicode"
+
+	"github.com/pkg/errors"
 )
 
 // KeyValue holds key and value.
 type KeyValue struct {
 	Key   string
 	Value string
+}
+
+func (kv *KeyValue) Write(p []byte) (int, error) {
+	b := bytes.FieldsFunc(p, parseFunction())
+
+	if len(b) != 1 {
+		return 0, errors.New("key-value field format error")
+	}
+
+	s := string(b[0])
+	eq := strings.Index(s, "=")
+
+	if eq < 0 {
+		return 0, errors.New("key-value assignment error")
+	}
+
+	v, err := strconv.Unquote(s[eq+1:])
+
+	if err != nil {
+		return 0, err
+	}
+
+	kv.Key = s[:eq]
+	kv.Value = v
+
+	return 0, nil
+}
+
+func parseFunction() func(rune) bool {
+	inQuotes := false
+	inEscapes := false
+
+	return func(r rune) bool {
+		if inEscapes {
+			inEscapes = false
+
+			return false
+		}
+
+		switch {
+		case r == '"':
+			inQuotes = !inQuotes
+		case r == '\\':
+			inEscapes = true
+		case unicode.IsSpace(r):
+			if !inQuotes {
+				return true
+			}
+		}
+
+		return false
+	}
 }
 
 func (kv *KeyValue) Read(p []byte) (int, error) {

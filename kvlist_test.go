@@ -7,7 +7,7 @@ import (
 )
 
 func TestKeyValue_Read(t *testing.T) {
-	kv := KeyValue{"key1", "value 日本語 \"quote\""}
+	kv := KeyValue{"key1", `value 日本語 "quote"`}
 	b := new(bytes.Buffer)
 
 	if _, err := b.ReadFrom(&kv); err != nil {
@@ -16,6 +16,22 @@ func TestKeyValue_Read(t *testing.T) {
 
 	if b.String() != `key1="value \u65e5\u672c\u8a9e \"quote\""` {
 		t.Error("values not matched")
+	}
+}
+
+func TestKeyValue_Write(t *testing.T) {
+	kv := KeyValue{}
+
+	if _, err := kv.Write(bytes.NewBufferString(`   key1="value \u65e5\u672c\u8a9e \"quote\""  `).Bytes()); err != nil {
+		t.Error(err)
+	}
+
+	if kv.Key != "key1" {
+		t.Error("invalid key:", kv.Key)
+	}
+
+	if kv.Value != `value 日本語 "quote"` {
+		t.Error("invalid value:", kv.Value)
 	}
 }
 
