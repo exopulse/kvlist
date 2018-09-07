@@ -1,6 +1,7 @@
 package kvlist
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"strconv"
@@ -12,7 +13,7 @@ type KeyValue struct {
 	Value string
 }
 
-func (kv *KeyValue) Read(p []byte) (n int, err error) {
+func (kv *KeyValue) Read(p []byte) (int, error) {
 	s := fmt.Sprintf("%s=%s", kv.Key, strconv.QuoteToASCII(kv.Value))
 
 	return copy(p, s), io.EOF
@@ -126,4 +127,24 @@ func (l *KeyValueList) Items() []KeyValue {
 
 func (l *KeyValueList) String() string {
 	return fmt.Sprintf("%s", l.list)
+}
+
+func (l *KeyValueList) Read(p []byte) (int, error) {
+	buffer := new(bytes.Buffer)
+
+	for _, e := range l.list {
+		if buffer.Len() > 0 {
+			_, err := buffer.WriteRune(' ')
+
+			if err != nil {
+				return 0, err
+			}
+		}
+
+		if _, err := buffer.ReadFrom(e); err != nil && err != io.EOF {
+			return 0, err
+		}
+	}
+
+	return copy(p, buffer.Bytes()), io.EOF
 }
