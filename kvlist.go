@@ -1,11 +1,21 @@
 package kvlist
 
-import "fmt"
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
 
 // KeyValue holds key and value.
 type KeyValue struct {
 	Key   string
 	Value string
+}
+
+func (kv *KeyValue) Read(p []byte) (n int, err error) {
+	s := fmt.Sprintf("%s=%s", kv.Key, strconv.QuoteToASCII(kv.Value))
+
+	return copy(p, s), io.EOF
 }
 
 func (kv *KeyValue) String() string {

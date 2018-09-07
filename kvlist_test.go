@@ -1,6 +1,7 @@
 package kvlist
 
 import (
+	"bytes"
 	"reflect"
 	"testing"
 )
@@ -152,5 +153,19 @@ func TestKeyValueList_String(t *testing.T) {
 
 	if l.String() != "[key1=value1 key2=value2]" {
 		t.Error("KeyValueList.String() failed")
+	}
+}
+
+func TestKeyValue_Read(t *testing.T) {
+	kv := KeyValue{"key1", "value 日本語 \"quote\""}
+
+	b := new(bytes.Buffer)
+
+	if _, err := b.ReadFrom(&kv); err != nil {
+		t.Error(err)
+	}
+
+	if b.String() != `key1="value \u65e5\u672c\u8a9e \"quote\""` {
+		t.Error("values not matched")
 	}
 }
