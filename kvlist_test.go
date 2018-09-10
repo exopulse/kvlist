@@ -119,6 +119,16 @@ func TestKeyValueList_DeleteKeys_NotFound(t *testing.T) {
 	}
 }
 
+func TestKeyValueList_Clear(t *testing.T) {
+	l := new(KeyValueList).Add(KeyValue{"key1", "value1"}).Add(KeyValue{"key2", "value2"})
+
+	l.Clear()
+
+	if l.Count() != 0 {
+		t.Fatalf("expected no items, got %d", l.Count())
+	}
+}
+
 func TestKeyValueList_Get(t *testing.T) {
 	l := new(KeyValueList).Add(KeyValue{"key1", "value1"}).Add(KeyValue{"key2", "value2"})
 

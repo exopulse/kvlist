@@ -141,6 +141,13 @@ func (l *KeyValueList) Count() int {
 	return len(l.list)
 }
 
+// Clear removes all items from the list.
+func (l *KeyValueList) Clear() *KeyValueList {
+	l.list = nil
+
+	return l
+}
+
 // Get returns key-value pair by index.
 func (l *KeyValueList) Get(index int) KeyValue {
 	return *l.list[index]
