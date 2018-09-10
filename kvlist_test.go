@@ -145,7 +145,7 @@ func TestKeyValueList_GetKey_Found(t *testing.T) {
 	l := new(KeyValueList).Add(KeyValue{"key1", "value1"})
 
 	if key, ok := l.GetKey("key1"); ok {
-		if !reflect.DeepEqual(key, (KeyValue{"key1", "value1"})) {
+		if !reflect.DeepEqual(key, ("value1")) {
 			t.Fatal("invalid item 0")
 		}
 	} else {

@@ -153,15 +153,15 @@ func (l *KeyValueList) Get(index int) KeyValue {
 	return *l.list[index]
 }
 
-// GetKey returns key-value pair by key.
-func (l *KeyValueList) GetKey(key string) (KeyValue, bool) {
+// GetKey returns key value by key.
+func (l *KeyValueList) GetKey(key string) (string, bool) {
 	for _, e := range l.list {
 		if e.Key == key {
-			return *e, true
+			return e.Value, true
 		}
 	}
 
-	return KeyValue{}, false
+	return "", false
 }
 
 // GetKeys returns key-value pairs by key.
