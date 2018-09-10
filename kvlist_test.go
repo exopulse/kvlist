@@ -161,6 +161,28 @@ func TestKeyValueList_GetKey_NotFound(t *testing.T) {
 	}
 }
 
+func TestKeyValueList_ScanKey_Found(t *testing.T) {
+	l := new(KeyValueList).Add(KeyValue{"key1", "value1"})
+	var v string
+
+	if ok := l.ScanKey(&v, "key1"); ok {
+		if v != "value1" {
+			t.Fatal("invalid item 0")
+		}
+	} else {
+		t.Fatal("key1 not found")
+	}
+}
+
+func TestKeyValueList_ScanKey_NotFound(t *testing.T) {
+	l := new(KeyValueList).Add(KeyValue{"key1", "value1"})
+	var v string
+
+	if ok := l.ScanKey(&v, "key2"); ok {
+		t.Fatal("key2 found")
+	}
+}
+
 func TestKeyValueList_GetKeys_Found(t *testing.T) {
 	l := new(KeyValueList).Add(KeyValue{"key1", "value1"}).Add(KeyValue{"key1", "value2"})
 	kvs := l.GetKeys("key1")

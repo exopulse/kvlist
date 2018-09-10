@@ -164,6 +164,19 @@ func (l *KeyValueList) GetKey(key string) (string, bool) {
 	return "", false
 }
 
+// ScanKey populates value receiver with key value.
+func (l *KeyValueList) ScanKey(receiver *string, key string) bool {
+	for _, e := range l.list {
+		if e.Key == key {
+			*receiver = e.Value
+
+			return true
+		}
+	}
+
+	return false
+}
+
 // GetKeys returns key-value pairs by key.
 func (l *KeyValueList) GetKeys(key string) []KeyValue {
 	var kvs []KeyValue
