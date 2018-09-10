@@ -28,7 +28,7 @@ func (kv *KeyValue) Write(p []byte) (int, error) {
 	eq := strings.Index(s, "=")
 
 	if eq < 0 {
-		return 0, errors.New("key-value assignment error")
+		return 0, errors.Errorf("key-value assignment error: %s", s)
 	}
 
 	v, err := strconv.Unquote(s[eq+1:])
@@ -203,4 +203,28 @@ func (l *KeyValueList) Read(p []byte) (int, error) {
 	}
 
 	return copy(p, buffer.Bytes()), io.EOF
+}
+
+func (l *KeyValueList) Write(p []byte) (int, error) {
+	fmt.Println(string(p))
+	bs := bytes.FieldsFunc(p, parseFunction())
+
+	for _, b := range bs {
+		s := string(b)
+		eq := strings.Index(s, "=")
+
+		if eq < 0 {
+			return 0, errors.Errorf("key-value assignment error: %s", s)
+		}
+
+		v, err := strconv.Unquote(s[eq+1:])
+
+		if err != nil {
+			return 0, err
+		}
+
+		l.list = append(l.list, &KeyValue{s[:eq], v})
+	}
+
+	return 0, nil
 }
