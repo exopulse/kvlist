@@ -258,3 +258,8 @@ func (l *KeyValueList) Write(p []byte) (int, error) {
 
 	return 0, nil
 }
+
+// New creates new key-value list.
+func New() *KeyValueList {
+	return new(KeyValueList)
+}

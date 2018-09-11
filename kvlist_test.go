@@ -36,7 +36,7 @@ func TestKeyValue_Write(t *testing.T) {
 }
 
 func TestKeyValueList_Add(t *testing.T) {
-	l := new(KeyValueList).Add("key1", "value1").Add("key2", "value2")
+	l := New().Add("key1", "value1").Add("key2", "value2")
 
 	if l.Count() != 2 {
 		t.Fatalf("expected two items, got %d", l.Count())
@@ -52,7 +52,7 @@ func TestKeyValueList_Add(t *testing.T) {
 }
 
 func TestKeyValueList_Put(t *testing.T) {
-	l := new(KeyValueList).Put("key1", "value1").Put("key1", "value2")
+	l := New().Put("key1", "value1").Put("key1", "value2")
 
 	if l.Count() != 1 {
 		t.Fatalf("expected one item, got %d", l.Count())
@@ -64,7 +64,7 @@ func TestKeyValueList_Put(t *testing.T) {
 }
 
 func TestKeyValueList_DeleteKey_Tail(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value2"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value2"})
 
 	if !l.DeleteKey("key2") {
 		t.Fatal("key2 not deleted")
@@ -80,7 +80,7 @@ func TestKeyValueList_DeleteKey_Tail(t *testing.T) {
 }
 
 func TestKeyValueList_DeleteKey_Head(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value2"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value2"})
 
 	if !l.DeleteKey("key1") {
 		t.Fatal("key2 not deleted")
@@ -96,7 +96,7 @@ func TestKeyValueList_DeleteKey_Head(t *testing.T) {
 }
 
 func TestKeyValueList_DeleteKeys_Found(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key1", "value2"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key1", "value2"})
 
 	if !l.DeleteKeys("key1") {
 		t.Fatal("key1 not deleted")
@@ -108,7 +108,7 @@ func TestKeyValueList_DeleteKeys_Found(t *testing.T) {
 }
 
 func TestKeyValueList_DeleteKeys_NotFound(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key1", "value2"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key1", "value2"})
 
 	if l.DeleteKeys("key2") {
 		t.Fatal("key2 deleted")
@@ -120,7 +120,7 @@ func TestKeyValueList_DeleteKeys_NotFound(t *testing.T) {
 }
 
 func TestKeyValueList_Clear(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value2"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value2"})
 
 	l.Clear()
 
@@ -130,7 +130,7 @@ func TestKeyValueList_Clear(t *testing.T) {
 }
 
 func TestKeyValueList_Get(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value2"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value2"})
 
 	if !reflect.DeepEqual(l.Get(0), (KeyValue{"key1", "value1"})) {
 		t.Fatal("invalid item 0")
@@ -142,7 +142,7 @@ func TestKeyValueList_Get(t *testing.T) {
 }
 
 func TestKeyValueList_GetKey_Found(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"})
 
 	if key, ok := l.GetKey("key1"); ok {
 		if !reflect.DeepEqual(key, ("value1")) {
@@ -154,7 +154,7 @@ func TestKeyValueList_GetKey_Found(t *testing.T) {
 }
 
 func TestKeyValueList_GetKey_NotFound(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"})
 
 	if _, ok := l.GetKey("key2"); ok {
 		t.Fatal("key2 found")
@@ -162,7 +162,7 @@ func TestKeyValueList_GetKey_NotFound(t *testing.T) {
 }
 
 func TestKeyValueList_ScanKey_Found(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"})
 	var v string
 
 	if ok := l.ScanKey(&v, "key1"); ok {
@@ -175,7 +175,7 @@ func TestKeyValueList_ScanKey_Found(t *testing.T) {
 }
 
 func TestKeyValueList_ScanKey_NotFound(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"})
 	var v string
 
 	if ok := l.ScanKey(&v, "key2"); ok {
@@ -184,7 +184,7 @@ func TestKeyValueList_ScanKey_NotFound(t *testing.T) {
 }
 
 func TestKeyValueList_GetKeys_Found(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key1", "value2"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key1", "value2"})
 	kvs := l.GetKeys("key1")
 
 	if !reflect.DeepEqual(kvs, []KeyValue{{"key1", "value1"}, {"key1", "value2"}}) {
@@ -193,7 +193,7 @@ func TestKeyValueList_GetKeys_Found(t *testing.T) {
 }
 
 func TestKeyValueList_GetKeys_NotFound(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key1", "value2"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key1", "value2"})
 	kvs := l.GetKeys("key2")
 
 	if len(kvs) != 0 {
@@ -202,7 +202,7 @@ func TestKeyValueList_GetKeys_NotFound(t *testing.T) {
 }
 
 func TestKeyValueList_Items(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key1", "value2"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key1", "value2"})
 
 	if !reflect.DeepEqual(l.Items(), []KeyValue{{"key1", "value1"}, {"key1", "value2"}}) {
 		t.Fatal("not all items found")
@@ -210,7 +210,7 @@ func TestKeyValueList_Items(t *testing.T) {
 }
 
 func TestKeyValueList_String(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value2"})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value2"})
 
 	if l.String() != "[key1=value1 key2=value2]" {
 		t.Fatal("KeyValueList.String() failed")
@@ -218,7 +218,7 @@ func TestKeyValueList_String(t *testing.T) {
 }
 
 func TestKeyValueList_Read(t *testing.T) {
-	l := new(KeyValueList).AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value 日本語 \"quote\""})
+	l := New().AddKeyValue(KeyValue{"key1", "value1"}).AddKeyValue(KeyValue{"key2", "value 日本語 \"quote\""})
 	b := new(bytes.Buffer)
 
 	if _, err := b.ReadFrom(l); err != nil {
@@ -232,7 +232,7 @@ func TestKeyValueList_Read(t *testing.T) {
 
 func TestKeyValueList_Write(t *testing.T) {
 	s := `   key1="value \u65e5\u672c\u8a9e \"quote\""  key2="value 2"`
-	l := new(KeyValueList)
+	l := New()
 
 	_, err := l.Write(bytes.NewBufferString(s).Bytes())
 
