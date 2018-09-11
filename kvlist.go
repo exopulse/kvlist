@@ -85,14 +85,24 @@ type KeyValueList struct {
 }
 
 // Add adds new key-value pair. Duplicate keys are allowed.
-func (l *KeyValueList) Add(kv KeyValue) *KeyValueList {
+func (l *KeyValueList) Add(key, value string) *KeyValueList {
+	return l.AddKeyValue(KeyValue{key, value})
+}
+
+// AddKeyValue adds new key-value pair. Duplicate keys are allowed.
+func (l *KeyValueList) AddKeyValue(kv KeyValue) *KeyValueList {
 	l.list = append(l.list, &kv)
 
 	return l
 }
 
 // Put adds new key-value pair. Existing key is removed.
-func (l *KeyValueList) Put(kv KeyValue) *KeyValueList {
+func (l *KeyValueList) Put(key, value string) *KeyValueList {
+	return l.PutKeyValue(KeyValue{key, value})
+}
+
+// PutKeyValue adds new key-value pair. Existing key is removed.
+func (l *KeyValueList) PutKeyValue(kv KeyValue) *KeyValueList {
 	for _, e := range l.list {
 		if e.Key == kv.Key {
 			e.Value = kv.Value
