@@ -236,7 +236,6 @@ func (l *KeyValueList) Read(p []byte) (int, error) {
 }
 
 func (l *KeyValueList) Write(p []byte) (int, error) {
-	fmt.Println(string(p))
 	bs := bytes.FieldsFunc(p, parseFunction())
 
 	for _, b := range bs {
