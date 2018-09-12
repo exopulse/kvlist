@@ -262,3 +262,14 @@ func (l *KeyValueList) Write(p []byte) (int, error) {
 func New() *KeyValueList {
 	return new(KeyValueList)
 }
+
+// NewFromString creates new key-value list from string.
+func NewFromString(s string) (*KeyValueList, error) {
+	l := new(KeyValueList)
+
+	if _, err := l.Write([]byte(s)); err != nil {
+		return nil, err
+	}
+
+	return l, nil
+}

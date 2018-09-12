@@ -232,9 +232,7 @@ func TestKeyValueList_Read(t *testing.T) {
 
 func TestKeyValueList_Write(t *testing.T) {
 	s := `   key1="value \u65e5\u672c\u8a9e \"quote\""  key2="value 2"`
-	l := New()
-
-	_, err := l.Write(bytes.NewBufferString(s).Bytes())
+	l, err := NewFromString(s)
 
 	if err != nil {
 		t.Fatal(err)
